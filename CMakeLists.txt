@@ -1,0 +1,6 @@
+cmake_minimum_required(VERSION 3.8)
+project (rib-blit)
+set(32BLIT_PATH "../32blit-beta/" CACHE PATH "Path to 32blit.cmake")
+include (${32BLIT_PATH}/32blit.cmake)
+blit_executable (rib-blit rib-blit.cpp rib-blit.hpp)
+blit_assets_yaml (rib-blit assets.yml)
