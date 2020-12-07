@@ -9,6 +9,54 @@ int32_t minY = 0;
 
 int32_t rowHeight = 40;
 
+class Actor {
+public:
+	virtual ~Actor() = default;
+	//Point loc = Point(16, 16);
+	Size size;
+	Rect spriteLocation;
+	float x = 0.0f;
+	float y = 0.0f;
+
+	Actor() = default;
+
+	Actor(float xIn, float yIn)
+	{
+		this->x = xIn;
+		this->y = yIn;
+	}
+
+	/*virtual Size GetSize()
+	{
+		return this->size;
+	}
+
+	virtual Rect GetSpriteLocation()
+	{
+		return this->spriteLocation;
+	}
+
+	Point GetLocation()
+	{
+		return this->loc;
+	}*/
+};
+
+class Eagle : public Actor
+{
+	void Update()
+	{
+		this->y += 12;
+	}	
+};
+
+enum PlayerState
+{
+	Alive,
+	Splat,
+	Splash,
+	Eagle
+};
 
 enum GameState {
 	Menu,
@@ -58,6 +106,14 @@ public:
 
 Game game;
 
+const uint32_t tilemap_width = 16;
+
+const uint32_t tilemap_height = 8;
+
+
+
+TileMap world(const_cast<uint8_t*>(map1), nullptr, Size(tilemap_width, tilemap_height), nullptr);
+
 ///////////////////////////////////////////////////////////////////////////
 //
 // init()
@@ -65,7 +121,7 @@ Game game;
 // setup your game here
 //
 void init() {
-	set_screen_mode(ScreenMode::hires);
+	//set_screen_mode(ScreenMode::hires);
 
 	if (screen.sprites != nullptr)
 	{
@@ -73,7 +129,11 @@ void init() {
 		screen.sprites = nullptr;
 	}
 	
-	screen.sprites = SpriteSheet::load(sprites_data);
+	//screen.sprites = SpriteSheet::load(sprites_data);
+
+	world.sprites = SpriteSheet::load(tile_sheet_1);
+	state = Play;
+
 }
 
 void DrawMenu()
@@ -81,9 +141,23 @@ void DrawMenu()
 	
 }
 
+void DrawWorld()
+{
+	Vec2 wo(64, 40);
+
+	world.transform =
+		Mat3::identity() *
+		Mat3::translation(wo) *
+		Mat3::scale(Vec2(0.5, 0.5)) *
+		Mat3::translation(Vec2(-128, -80));
+
+	world.draw(&screen, Rect(0, 0, 320, 240), nullptr);
+
+}
+
 void DrawGame()
 {
-	
+	DrawWorld();
 }
 
 void DrawGameOver()
@@ -141,7 +215,7 @@ void update(uint32_t time) {
 		
 		break;
 	case Play:
-		
+	
 		break;
 	case GameOver:
 		
