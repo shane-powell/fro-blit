@@ -106,9 +106,9 @@ public:
 
 Game game;
 
-const uint32_t tilemap_width = 16;
+const uint32_t tilemap_width = 32;
 
-const uint32_t tilemap_height = 8;
+const uint32_t tilemap_height = 16;
 
 
 
@@ -145,11 +145,11 @@ void DrawWorld()
 {
 	Vec2 wo(64, 40);
 
-	world.transform =
+	/*world.transform =
 		Mat3::identity() *
 		Mat3::translation(wo) *
 		Mat3::scale(Vec2(0.5, 0.5)) *
-		Mat3::translation(Vec2(-128, -80));
+		Mat3::translation(Vec2(-128, -80));*/
 
 	world.draw(&screen, Rect(0, 0, 320, 240), nullptr);
 
