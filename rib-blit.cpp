@@ -108,9 +108,9 @@ Game game;
 
 const uint32_t tilemap_width = 32;
 
-const uint32_t tilemap_height = 16;
+const uint32_t tilemap_height = 64;
 
-
+float worldY = 392; // Map height + 8
 
 TileMap world(const_cast<uint8_t*>(map1), nullptr, Size(tilemap_width, tilemap_height), nullptr);
 
@@ -132,7 +132,8 @@ void init() {
 	//screen.sprites = SpriteSheet::load(sprites_data);
 
 	world.sprites = SpriteSheet::load(tile_sheet_1);
-	state = Play;
+	
+	state = Menu;
 
 }
 
@@ -143,13 +144,13 @@ void DrawMenu()
 
 void DrawWorld()
 {
-	Vec2 wo(64, 40);
+	const Vec2 wo(0, worldY);
 
-	/*world.transform =
+	world.transform =
 		Mat3::identity() *
-		Mat3::translation(wo) *
-		Mat3::scale(Vec2(0.5, 0.5)) *
-		Mat3::translation(Vec2(-128, -80));*/
+		Mat3::translation(wo);
+		//Mat3::scale(Vec2(0.5, 0.5)) *
+		//Mat3::translation(Vec2(-128, -80));
 
 	world.draw(&screen, Rect(0, 0, 320, 240), nullptr);
 
@@ -204,6 +205,8 @@ void render(uint32_t time) {
 //
 void update(uint32_t time) {
 
+	
+	
 	static uint16_t lastButtons = 0;
 	uint16_t changed = blit::buttons ^ lastButtons;
 	uint16_t pressed = changed & blit::buttons;
@@ -212,10 +215,14 @@ void update(uint32_t time) {
 	switch (state)
 	{
 	case Menu:
-		
+		if (buttons & Button::A)
+		{
+			state = Play;
+		}
 		break;
 	case Play:
-	
+		//worldY -= 0.01f;
+		worldY -= 0.5f;
 		break;
 	case GameOver:
 		
